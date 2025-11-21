@@ -1,6 +1,26 @@
 version: '3.8'
 
 services:
+  app:
+    image: ezic14/crm.api:latest
+    container_name: django_crm_app
+    restart: always
+    environment:
+      - SECRET_KEY=django-insecure-4b3!%5!&@!&@!&@!&@!&@!&@!&@!&@!
+      - ALLOWED_HOSTS=*
+      - CORS_ORIGIN_WHITELIST=[]
+      - DEBUG=True
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=db
+      - DB_USER=postgres
+      - DB_PASSWORD=password123
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   postgres:
     image: postgres:16
     container_name: django_crm_db
@@ -13,6 +33,11 @@ services:
       POSTGRES_PASSWORD: password123
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:
