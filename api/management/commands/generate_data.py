@@ -26,7 +26,12 @@ class Command(BaseCommand):
         customers_n = options['customers']
         interactions_per = options['interactions_per_customer']
 
-        self.stdout.write('Generating users...')
+        # Verificar si ya existen datos
+        if Customer.objects.exists():
+            self.stdout.write(self.style.WARNING(f'⚠️  Ya existen {Customer.objects.count()} clientes. Omitiendo generación de datos.'))
+            return
+
+        self.stdout.write('👥 Generando usuarios...')
         users = []
         for i in range(users_n):
             u = User.objects.create_user(username=f'sales{i+1}', password='password')
