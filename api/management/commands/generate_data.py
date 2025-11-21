@@ -6,7 +6,7 @@ from faker import Faker
 import random
 from datetime import timedelta
 
-from crm.models import Company, Customer, Interaction
+from api.models import Company, Customer, Interaction
 
 
 class Command(BaseCommand):
